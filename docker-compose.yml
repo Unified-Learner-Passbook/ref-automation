@@ -264,7 +264,7 @@ services:
   #############################################################################################################################
 
   rc-wallet:
-    image: dubea/rc-ewallet:1.0
+    image: dubea/rc-ewallet:1.2
     container_name: "ewallet"
     volumes:
       - ./ewallet/config/config.json:/usr/share/nginx/html/assets/config/config.json
@@ -272,7 +272,7 @@ services:
   #################################################################################################################################
 
   rc-verification:
-    image: dubea/verification:1.0
+    image: dubea/verification:1.2
     container_name: "verification-portal"
     volumes:
       - ./varification/config/config.json:/usr/share/nginx/html/assets/config/config.json
