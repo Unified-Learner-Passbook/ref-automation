@@ -47,7 +47,7 @@ server {
         listen 80;
         listen [::]:80;
 
-        root /var/www/$your_domain/html;
+        root /var/www/$your_domain/public;
         index index.html index.htm index.nginx-debian.html;
 
         server_name $your_domain www.$your_domain;
