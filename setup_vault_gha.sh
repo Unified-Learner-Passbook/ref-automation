@@ -36,9 +36,15 @@ until check_vault_status; do
     sleep 1;
 done
 
-# keys contains ansi escape sequences, remove them if any
-docker-compose -f "$COMPOSE_FILE" exec -T "$SERVICE_NAME" vault operator init > ansi-keys.txt
-sed 's/\x1B\[[0-9;]*[JKmsu]//g' < ansi-keys.txt  > keys.txt
+
+if [[ $vault_status == *"Initialized     true"* ]]; then
+    echo "Vault is initialized already. Unsealing if it is not unsealed"
+else
+  # keys contains ansi escape sequences, remove them if any
+  docker-compose -f "$COMPOSE_FILE" exec -T "$SERVICE_NAME" vault operator init > ansi-keys.txt
+  sed 's/\x1B\[[0-9;]*[JKmsu]//g' < ansi-keys.txt  > keys.txt
+fi
+
 sed -n 's/Unseal Key [1-1]\+: \(.*\)/\1/p' keys.txt > parsed-key.txt
 key=$(cat parsed-key.txt)
 docker-compose -f "$COMPOSE_FILE" exec -T "$SERVICE_NAME" vault operator unseal "$key" < /dev/null
@@ -53,11 +59,19 @@ docker-compose -f "$COMPOSE_FILE" exec -T "$SERVICE_NAME" vault operator unseal 
 
 root_token=$(sed -n 's/Initial Root Token: \(.*\)/\1/p' keys.txt | tr -dc '[:print:]')
 
-sed -i "s/VAULT_TOKEN:.*/VAULT_TOKEN: $root_token/" "$COMPOSE_FILE"
+if [[ $vault_status == *"Initialized     true"* ]]; then
+    echo "Vault is initialized already. Skipping creating a KV engine"
+else
+  sed -i "s/VAULT_TOKEN=.*/VAULT_TOKEN=$root_token/" ".env"
+  docker-compose -f "$COMPOSE_FILE" exec -e VAULT_TOKEN=$root_token -T "$SERVICE_NAME" vault secrets enable -path=kv kv-v2
+fi
 
-docker-compose -f "$COMPOSE_FILE" exec -e VAULT_TOKEN=$root_token -T "$SERVICE_NAME" vault secrets enable -path=kv kv-v2
+echo -e "\nNOTE: KEYS ARE STORED IN keys.txt"
 
-echo -e "\nNOTE: STORE THE FOLLOWING KEYS SOMEWHERE SAFELY. THESE ARE USED TO UNSEAL VAULT ON RESTARTS"
+if [ -f "ansi-keys.txt" ] ; then
+    rm ansi-keys.txt
+fi
 
-cat keys.txt
-rm parsed-key.txt ansi-keys.txt keys.txt
+if [ -f "parsed-key.txt" ] ; then
+    rm parsed-key.txt
+fi

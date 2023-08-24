@@ -1,0 +1,16 @@
+# Don't include builds of jobs, we might face merge conflicts
+*builds
+*nextBuildNumber
+
+*branches
+*indexing
+
+.idea
+parsed-key.txt
+keys.txt
+ansi-keys.txt
+*workspace
+
+.env
+
+data
