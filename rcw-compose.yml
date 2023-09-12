@@ -139,3 +139,6 @@ services:
 
 volumes:
   vault-data:
+networks:
+  registry:
+    driver: bridge
