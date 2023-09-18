@@ -123,7 +123,7 @@ services:
       - telemetry_service_clickhouse
   ##########################################################################################################################
   bff_service:
-    image: dubea/bff:1.0
+    image: dubea/ulp-bff-service:v1.0.1
     container_name: "bff-service"
     ports:
       - 3003:3000
@@ -159,7 +159,7 @@ services:
       - TELEMETRY_URL=https://ulp.uniteframework.io/telemetry
   ################################################################################################################################
   bulk_issuance:
-    image: dubea/bulk-issuance:1.0
+    image: dubea/bulk-issueance:v1.0.1
     container_name: "bulk-issuance"
     ports:
       - 3007:3007
@@ -197,7 +197,7 @@ services:
   #############################################################################################################################
 
   rc-wallet:
-    image: dubea/rc-ewallet:1.2
+    image: dubea/rc-wallett:v1.0.1
     container_name: "ewallet"
     volumes:
       - ./ewallet/config/config.json:/usr/share/nginx/html/assets/config/config.json
@@ -205,7 +205,7 @@ services:
   #################################################################################################################################
 
   rc-verification:
-    image: dubea/verification:1.2
+    image: dubea/ulp-verification:v1.0.1
     container_name: "verification-portal"
     volumes:
       - ./varification/config/config.json:/usr/share/nginx/html/assets/config/config.json
