@@ -219,7 +219,7 @@ services:
   metabase:
     image: metabase/metabase
     ports:
-      - "3007:3000"
+      - "4000:3000"
     volumes:
       - ./metabase-data:/metabase-data
     environment:
