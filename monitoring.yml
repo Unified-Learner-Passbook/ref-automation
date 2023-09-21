@@ -10,6 +10,9 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
     volumes:
       - /es_data:/usr/share/elasticsearch/data
+    ports:
+      - 8300:9200
+      - 8400:9300
     environment:
       - http.host=0.0.0.0
       - transport.host=localhost
@@ -28,7 +31,7 @@ services:
       - /graylog_journal:/usr/share/graylog/data/journal
     environment:
       - GRAYLOG_PASSWORD_SECRET=qwertyuiop123456
-      - GRAYLOG_ROOT_PASSWORD_SHA2=0485df2c3af8d7cf5c97cb73bf18dd00e78979c88d1488121e01000e36190667
+      - GRAYLOG_ROOT_PASSWORD_SHA2=${GRAYLOG_ROOT_PASSWORD_SHA2}
       - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
     entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
     networks:
