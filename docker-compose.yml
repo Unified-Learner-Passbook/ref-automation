@@ -27,6 +27,10 @@ services:
   registry:
     image: dockerhub/sunbird-rc-core:v0.0.13
     container_name: "registry"
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     volumes:
       - ./schemas:/home/sunbirdrc/config/public/_schemas
     environment:
@@ -76,6 +80,10 @@ services:
   keycloak:
     image: sunbirdrc/keycloak:latest
     container_name: "keycloak"
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     volumes:
       - ./imports:/opt/jboss/keycloak/imports
       - keycloak_data:/opt/jboss/keycloak
@@ -102,6 +110,10 @@ services:
   telemetry_service_clickhouse:
     image: clickhouse/clickhouse-server
     container_name: telemetry-clickhouse
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     volumes:
       - clickhouse_data:/var/lib/clickhouse
     environment:
@@ -125,6 +137,10 @@ services:
   bff_service:
     image: dubea/ulp-bff-service:v1.0.1
     container_name: "bff-service"
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     ports:
       - 3003:3000
     deploy:
@@ -161,6 +177,10 @@ services:
   bulk_issuance:
     image: dubea/bulk-issueance:v1.0.1
     container_name: "bulk-issuance"
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     ports:
       - 3007:3007
     deploy:
@@ -218,6 +238,10 @@ services:
 ##############################################################################################################################
   metabase:
     image: metabase/metabase
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     ports:
       - "4000:3000"
     volumes:

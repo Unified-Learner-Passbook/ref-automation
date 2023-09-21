@@ -27,6 +27,10 @@ services:
 
   identity:
     image: ghcr.io/samagrax-rcw/identity:latest
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     ports:
       - "3332:3332"
     depends_on:
@@ -67,6 +71,10 @@ services:
 
   schema:
     image: ghcr.io/samagrax-rcw/schema:latest
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     ports:
       - "3333:3333"
     depends_on:
@@ -101,6 +109,10 @@ services:
 
   credential:
     image: ghcr.io/samagrax-rcw/credential:latest
+    logging:
+      driver: 'gelf'
+      options:
+        gelf-address: "tcp://localhost:12201"
     ports:
       - "3000:3000"
     depends_on:
