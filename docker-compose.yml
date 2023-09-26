@@ -219,6 +219,8 @@ services:
   rc-wallet:
     image: dubea/rc-wallett:v1.0.1
     container_name: "ewallet"
+    ports:
+      - "181:80"
     volumes:
       - ./ewallet/config/config.json:/usr/share/nginx/html/assets/config/config.json
 
@@ -227,17 +229,46 @@ services:
   rc-verification:
     image: dubea/ulp-verification:v1.0.1
     container_name: "verification-portal"
+    ports:
+      - "182:80"
     volumes:
       - ./varification/config/config.json:/usr/share/nginx/html/assets/config/config.json
 
 #############################################################################################################################
+  rc-registration-portal:
+    image: dubea/ulp-rg-portal:v1.0.1
+    container_name: "registration-portal"
+    ports:
+      - "183:80"
+#############################################################################################################################
   nginx-gateway:
     image: dubea/nginx-gateway:1
+    container_name: 'nginx'
     ports:
-      - "182:80"
+      - "184:80"
+    healthcheck:
+      test:
+        [ "CMD-SHELL", "curl -f http://localhost:182/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - registry
+      - keycloak
+      - bulk_issuance
+      - bff_service
+      - telemetry_service_clickhouse
+      - credential
+      - identity
+      - schema
+      - rc-registration-portal
+      - rc-wallet
+      - rc-verification
+
 ##############################################################################################################################
   metabase:
     image: metabase/metabase
+    container_name: 'metabase'
     logging:
       driver: 'gelf'
       options:
