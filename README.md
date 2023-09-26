@@ -1,19 +1,19 @@
-#ref-automation 
+## ref-automation 
 There are two ways for the ULP to be deployed on the server 
 A. with domain 
 B. without domain
 
-A. For the First case you need to follow below steps 
+## A. For the First case you need to follow below steps 
 
 
-#Step 1 – Installing Nginx
+## Step 1 – Installing Nginx
 git clone https://github.com/Unified-Learner-Passbook/ref-automation.git
 Go to specific directory where you have clone the repository i.e. ref-automation Then perform the following command
 sudo chmod -R +x nginx.sh
 export your_domain=<domain_name>  (Example : export your_domain=test.automation.com) 
 Then run the nginx.sh file ./nginx.sh
 
-#Step 2 - Register your server to the Domain
+## Step 2 - Register your server to the Domain
 Register The Server IP in the domain name in A records and wait for the validation.
 Install Certbot
 To install certbot for the ubuntu20.04 for nginx use cases follow the below command
@@ -27,13 +27,13 @@ www.test.automation.com
 Then select 1
 Select the option redirecting the http to https access and you are done with the SSL certificates
 
-#Step 3 - Setting Up the directories and services
+## Step 3 - Setting Up the directories and services
 For adding directory for the  monitoring services perform below steps 
 sudo chmod +x monitoring.sh
 
 Run the monitoring.sh file by ./monitoring.sh
 
-Then it will stop at the password step Enter and you will receive a root password and add that password in the .env.sample file on line no. 45 in below variables
+Then it will stop at the password step Enter and you will receive a root password and add that password in the .env.sample file on line no. 45 in below variables in .env file
  
 #monitoring-stack
 GRAYLOG_ROOT_PASSWORD_SHA2=<add_root_password_here>
@@ -53,9 +53,9 @@ Add the required Entries in the nginx file in below location
 /etc/nginx/sites-enabled/test.conf
 
 ####
-#B. for the second case without domain follow the below steps  
+## B. for the second case without domain follow the below steps  
 
-#Step 1 – Setting Up the directories and services
+## Step 1 – Setting Up the directories and services
 git clone https://github.com/Unified-Learner-Passbook/ref-automation.git
 Go to specific directory where you have clone the repository i.e. ref-automation
 For adding directory for the  monitoring services perform below steps 
@@ -63,7 +63,7 @@ sudo chmod +x monitoring.sh
 
 Run the monitoring.sh file by ./monitoring.sh
 
-Then it will stop at the password step then Enter and you will receive a root password and add that password in the .env.sample file on line no. 45 in below variables
+Then it will stop at the password step then Enter and you will receive a root password and add that password in the .env.sample file on line no. 45 in below variables in .env file
  
 #monitoring-stack
 GRAYLOG_ROOT_PASSWORD_SHA2=<add_root_password_here>
