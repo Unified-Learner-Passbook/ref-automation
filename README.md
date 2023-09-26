@@ -1,75 +1,83 @@
-# ref-automation
+#ref-automation 
+There are two ways for the ULP to be deployed on the server 
+A. with domain 
+B. without domain
 
-## Step 1 – Installing Nginx
+A. For the First case you need to follow below steps 
 
-  git clone https://github.com/Unified-Learner-Passbook/ref-automation.git
 
-Go to specific directory where you have clone the repository i.e. ref-automation 
-Then perform the following command 
+#Step 1 – Installing Nginx
+git clone https://github.com/Unified-Learner-Passbook/ref-automation.git
+Go to specific directory where you have clone the repository i.e. ref-automation Then perform the following command
+sudo chmod -R +x nginx.sh
+export your_domain=<domain_name>  (Example : export your_domain=test.automation.com) 
+Then run the nginx.sh file ./nginx.sh
 
-  sudo chmod -R +x nginx.sh
-
-Export your_domain=<domain you want > 
-Example : (export your_domain=test.automation.com)
-Then run the nginx.sh file 
-./nginx.sh 
-
-## Step 2 - Register your server to the Domain
-Register The Server IP in the domain name in A records and wait for the validation. 
- 
-### Install Certbot 
-To install certbot for the ubuntu20.04 for nginx use cases follow the below command 
-
-  sudo apt install certbot python3-certbot-nginx
-
-  sudo certbot 
-
+#Step 2 - Register your server to the Domain
+Register The Server IP in the domain name in A records and wait for the validation.
+Install Certbot
+To install certbot for the ubuntu20.04 for nginx use cases follow the below command
+sudo apt install certbot python3-certbot-nginx
+sudo certbot
 Add your mail id in the next step.
-
-Then agree to the terms and conditions by Typing "Y" + Enter
-After that certbot will show you domain name you have setup select the appropriate domain name there with number 
-Ex : 
-1. Test.automation.com 
-2. www.test.automation.com
-
+Then agree to the terms and conditions by Typing "A" + Enter After that  
+certbot will show you domain name you have setup select the appropriate domain name there with number Ex :
+Test.automation.com
+www.test.automation.com
 Then select 1
-
 Select the option redirecting the http to https access and you are done with the SSL certificates
 
-## Step 3 - Setting Up the services 
+#Step 3 - Setting Up the directories and services
+For adding directory for the  monitoring services perform below steps 
+sudo chmod +x monitoring.sh
+
+Run the monitoring.sh file by ./monitoring.sh
+
+Then it will stop at the password step Enter and you will receive a root password and add that password in the .env.sample file on line no. 45 in below variables
  
-After installing certificates to the domain go to specific directory i.e. ref-automation
-And perform the following command 
-
-  sudo docker-compose up -d 
-
-Once all the containers are up and running then perform the below commands step by step 
-
-  sudo docker exec -it postgres_db bash
-  psql -U postgres
-  CREATE DATABASE cred_ms
-  CREATE DATABASE cred_ms_schema
-  CREATE DATABASE identity 
-
-And exit the container
-Perform the following command in the terminal : 
+#monitoring-stack
+GRAYLOG_ROOT_PASSWORD_SHA2=<add_root_password_here>
  
-sudo docker restart credential_ms cred_schema_ms_service did_l3_service
 
-### Step 4 - Nginx configurations 
+After installing certificates to the domain go to specific directory i.e. ref-automation And perform the following command
 
-Go to the /etc/nginx/sites-enabled/ and go to the config file of your domain that we have created 
-add the below entity in the file in the server block 
+sudo su -
 
-location /registry/ {
-                proxy_pass http://regisry:8081/;
-        }
+Then go to specific directory where you have clone the repo :   https://github.com/Unified-Learner-Passbook/ref-automation.git
 
-Like above add your service name and in proxy_pass add container name with assign Port
-save and close the file 
-then run the below commands 
+Run the command : make
 
-  sudo nginx -t 
-  sudo systemctl restart nginx 
+It will deploy all the services on the server.
 
-check the domain name with https access.
+Add the required Entries in the nginx file in below location 
+/etc/nginx/sites-enabled/test.conf
+
+####
+#B. for the second case without domain follow the below steps  
+
+#Step 1 – Setting Up the directories and services
+git clone https://github.com/Unified-Learner-Passbook/ref-automation.git
+Go to specific directory where you have clone the repository i.e. ref-automation
+For adding directory for the  monitoring services perform below steps 
+sudo chmod +x monitoring.sh
+
+Run the monitoring.sh file by ./monitoring.sh
+
+Then it will stop at the password step then Enter and you will receive a root password and add that password in the .env.sample file on line no. 45 in below variables
+ 
+#monitoring-stack
+GRAYLOG_ROOT_PASSWORD_SHA2=<add_root_password_here>
+
+Perform the following command for installing the services on the server
+
+sudo su -
+
+Then go to specific directory where you have clone the repo :   i.e. ref-automation
+https://github.com/Unified-Learner-Passbook/ref-automation.git
+
+Run the command : make
+
+It will deploy all the services on the server.
+
+Add the required Entries in the nginx file in below location 
+/etc/nginx/sites-enabled/test.conf
