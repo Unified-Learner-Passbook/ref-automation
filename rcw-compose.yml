@@ -2,6 +2,7 @@ version: '3'
 services:
   vault:
     image: vault:1.12.3
+    container_name: 'vault'
     restart: always
     volumes:
       - ./vault.json:/vault/config/vault.json
@@ -27,6 +28,7 @@ services:
 
   identity:
     image: ghcr.io/samagrax-rcw/identity:latest
+    container_name: 'identity'
     logging:
       driver: 'gelf'
       options:
@@ -71,6 +73,7 @@ services:
 
   schema:
     image: ghcr.io/samagrax-rcw/schema:latest
+    container_name: 'schema'
     logging:
       driver: 'gelf'
       options:
@@ -114,7 +117,7 @@ services:
       options:
         gelf-address: "tcp://localhost:12201"
     ports:
-      - "3000:3000"
+      - "3331:3331"
     depends_on:
       credential-db:
         condition: service_healthy

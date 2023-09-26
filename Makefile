@@ -8,3 +8,6 @@ start:
 	docker-compose -f monitoring.yml up -d elasticsearch
 	docker-compose -f monitoring.yml up -d graylog
 	docker-compose up -d
+	wget https://github.com/AbhilashKD/test/blob/master/Downloads/metabase/clickhouse.metabase-driver.jar
+	docker cp clickhouse.metabase-driver.jar metabase:/plugins/
+	docker restart metabase
