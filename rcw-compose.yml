@@ -393,7 +393,7 @@ services:
       - "183:80"
 #############################################################################################################################
   nginx-gateway:
-    image: dubea/nginx-gateway:1
+    image: dubea/nginx-gateway:v1.0.1
     container_name: 'nginx'
     ports:
       - "184:80"
@@ -439,7 +439,7 @@ volumes:
     driver: local
   keycloak_data:
     driver: local
-    
+
 networks:
   registry:
     driver: bridge
