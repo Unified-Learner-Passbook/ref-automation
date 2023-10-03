@@ -400,8 +400,8 @@ services:
     healthcheck:
       test:
         [ "CMD-SHELL", "curl -f http://localhost:182/health || exit 1" ]
-      interval: 10s
-      timeout: 5s
+      interval: 50s
+      timeout: 45s
       retries: 5
     depends_on:
       - registry
